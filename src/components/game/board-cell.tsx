@@ -42,17 +42,17 @@ const BoardCell: React.FC<{ value: Player; onClick: () => void }> = ({
     <button
       onClick={onClick}
       className={cn(
-        'aspect-square bg-slate-800 rounded-lg flex items-center justify-center text-5xl transition-all p-2',
+        'aspect-square bg-slate-800 rounded-lg flex items-center justify-center transition-all',
         'hover:bg-slate-700 focus:ring-2 focus:ring-slate-400',
         'animate-in fade-in-50 duration-300',
         { 'pointer-events-none': value !== null }
       )}
     >
       {value === 'X' && (
-        <XIcon className="text-emerald-400 w-16 h-16 animate-in zoom-in-50 duration-200" />
+        <XIcon className="text-emerald-400 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 animate-in zoom-in-50 duration-200" />
       )}
       {value === 'O' && (
-        <OIcon className="text-violet-400 w-16 h-16 animate-in zoom-in-50 duration-200" />
+        <OIcon className="text-violet-400 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 animate-in zoom-in-50 duration-200" />
       )}
     </button>
   )

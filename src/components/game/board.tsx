@@ -19,14 +19,16 @@ const GameBoard: React.FC = () => {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-3 p-1">
-      {state.board.map((cell, index) => (
-        <BoardCell
-          key={index}
-          value={cell}
-          onClick={() => handleCellClick(index)}
-        />
-      ))}
+    <div className="flex justify-center w-full">
+      <div className="grid grid-cols-3 gap-3 p-1 max-w-xs sm:max-w-sm md:max-w-md aspect-square w-full">
+        {state.board.map((cell, index) => (
+          <BoardCell
+            key={index}
+            value={cell}
+            onClick={() => handleCellClick(index)}
+          />
+        ))}
+      </div>
     </div>
   )
 }
