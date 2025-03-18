@@ -9,7 +9,7 @@ const XIcon: React.FC<{ className?: string }> = ({ className }) => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="3"
     strokeLinecap="round"
     strokeLinejoin="round"
     className={className}
@@ -25,7 +25,7 @@ const OIcon: React.FC<{ className?: string }> = ({ className }) => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="3"
     strokeLinecap="round"
     strokeLinejoin="round"
     className={className}
@@ -42,17 +42,17 @@ const BoardCell: React.FC<{ value: Player; onClick: () => void }> = ({
     <button
       onClick={onClick}
       className={cn(
-        'aspect-square bg-slate-800 rounded-lg flex items-center justify-center text-4xl transition-all',
+        'aspect-square bg-slate-800 rounded-lg flex items-center justify-center text-5xl transition-all p-2',
         'hover:bg-slate-700 focus:ring-2 focus:ring-slate-400',
         'animate-in fade-in-50 duration-300',
         { 'pointer-events-none': value !== null }
       )}
     >
       {value === 'X' && (
-        <XIcon className="text-emerald-400 w-12 h-12 animate-in zoom-in-50 duration-200" />
+        <XIcon className="text-emerald-400 w-16 h-16 animate-in zoom-in-50 duration-200" />
       )}
       {value === 'O' && (
-        <OIcon className="text-violet-400 w-12 h-12 animate-in zoom-in-50 duration-200" />
+        <OIcon className="text-violet-400 w-16 h-16 animate-in zoom-in-50 duration-200" />
       )}
     </button>
   )

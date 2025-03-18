@@ -19,7 +19,7 @@ const GameBoard: React.FC = () => {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-2">
+    <div className="grid grid-cols-3 gap-3 p-1">
       {state.board.map((cell, index) => (
         <BoardCell
           key={index}

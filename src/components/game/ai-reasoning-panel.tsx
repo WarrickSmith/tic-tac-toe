@@ -6,21 +6,25 @@ const AIReasoningPanel: React.FC = () => {
   const { state } = useGameContext()
 
   return (
-    <div className="p-4 rounded-lg border border-border">
-      <h2 className="text-lg font-semibold mb-2">AI Reasoning</h2>
+    <div className="p-4 rounded-lg border border-border bg-slate-800/30">
+      <h2 className="text-xl font-bold mb-3 text-violet-400">AI Reasoning</h2>
       {state.isAiThinking ? (
-        <p className="text-muted-foreground">Thinking...</p>
+        <p className="text-muted-foreground text-base animate-pulse">
+          Thinking...
+        </p>
       ) : (
-        <div className="text-sm space-y-2">
+        <div className="text-base space-y-3">
           {state.aiRawResponse ? (
             state.aiReasoning ? (
-              <p className="whitespace-pre-wrap">{state.aiReasoning}</p>
+              <p className="whitespace-pre-wrap leading-relaxed">
+                {state.aiReasoning}
+              </p>
             ) : (
               <>
-                <p className="text-red-500">
+                <p className="text-red-500 font-medium">
                   Could not parse structured response. Raw output:
                 </p>
-                <div className="bg-muted p-3 rounded-md font-mono text-xs">
+                <div className="bg-slate-900/80 p-4 rounded-md font-mono text-sm overflow-auto max-h-64">
                   {state.aiRawResponse}
                 </div>
               </>
