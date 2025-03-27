@@ -65,9 +65,15 @@ export async function POST(request: Request) {
 
     Available moves (indices): [${availableMoves.join(', ')}]
 
-    Follow these strict priorities meticulously when choosing your move ONLY from the available moves:
+    It is CRITICAL that you choose your move ONLY from this list of available move indices: [${availableMoves.join(
+      ', '
+    )}]. Do NOT choose an index that is not in this list.
 
-    Priority 1: WINNING MOVE. Check if placing 'O' in any available position results in an immediate win (three 'O's in a row, column, or diagonal). If yes, choose that winning position. Check ALL potential winning lines involving available moves.
+    Follow these strict priorities meticulously when choosing your move:
+
+    Priority 1: WINNING MOVE. Check if placing 'O' in any of the AVAILABLE positions ([${availableMoves.join(
+      ', '
+    )}]) results in an immediate win (three 'O's in a row, column, or diagonal). If yes, choose that winning position.
     Priority 2: BLOCKING MOVE. If no winning move exists for 'O', check if the opponent 'X' could win on their *next* turn by placing 'X' in any of the currently available positions. If yes, you MUST choose that position to block them. If multiple blocking moves are needed (e.g., opponent has two winning lines), block one of them. Check ALL potential opponent winning lines involving available moves.
     Priority 3: STRATEGIC MOVE. If there's no immediate winning move for 'O' AND no immediate blocking move is required against 'X', then choose the best strategic move from the remaining available positions. Good strategies include: taking the center (4 if available), taking corners (0, 2, 6, 8 if available), or setting up a two-way threat (fork).
 
@@ -86,15 +92,29 @@ export async function POST(request: Request) {
     const moveData = extractJson(textResponse)
     console.log('moveData', moveData)
 
-    if (moveData) {
+    // Validate the move received from the AI
+    if (
+      moveData &&
+      typeof moveData.move === 'number' &&
+      availableMoves.includes(moveData.move)
+    ) {
+      // Move is valid and available
       return Response.json({
         move: moveData.move,
         reasoning: moveData.reasoning,
-        rawResponse: textResponse, // Always include the raw response
+        rawResponse: textResponse,
       })
     } else {
+      // Invalid move: either not parsed, wrong type, or not in the available list
+      const invalidMove = moveData?.move ?? 'undefined'
+      console.error(
+        `Invalid move received from AI: ${invalidMove}. Available: [${availableMoves.join(
+          ', '
+        )}] Raw Response: ${textResponse}`
+      )
+      // Return an error to the frontend, triggering the fallback
       return Response.json({
-        error: 'Could not parse AI response',
+        error: `AI proposed an invalid move: ${invalidMove}. Falling back.`,
         rawResponse: textResponse,
       })
     }
