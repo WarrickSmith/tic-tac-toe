@@ -1,6 +1,6 @@
 // app/api/gemini/route.ts
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import { Board } from '@/lib/types/game'
+import { Board, Player } from '@/lib/types/game' // Import Player type
 
 const formatBoard = (board: Board): string => {
   return board.map((cell) => (cell === null ? '-' : cell)).join('')
@@ -52,31 +52,31 @@ export async function POST(request: Request) {
   const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' }) // Model updated to 1.5-pro
 
   const formattedBoard = formatBoard(board)
+  const availableMoves = board
+    .map((cell: Player | null, index: number) => (cell === null ? index : null))
+    .filter((index: number | null): index is number => index !== null) // Type guard for filtering
 
   const prompt = `
-    I'm playing tic-tac-toe as 'O' against a human who is 'X'.
-    Current board state (indexes 0-8):
+    You are an expert Tic-Tac-Toe AI player playing as 'O' against a human 'X'. Your goal is to win or force a draw.
+    Current board state (indexes 0-8, '-' represents empty):
     ${formattedBoard.slice(0, 3)}
     ${formattedBoard.slice(3, 6)}
     ${formattedBoard.slice(6, 9)}
-    
-    As an unbeatable tic-tac-toe AI, follow these strict priorities when choosing a move:
-    
-    Priority 1: If I ('O') can win in this move, take that winning position immediately.
-    Priority 2: If the human ('X') has a winning move next, block that position.
-    Priority 3: Only if no winning or blocking moves are available, make the most strategic move.
-    
-    For each move you consider, explicitly check:
-    - "Can I win now?" - check every possible winning line for two 'O's and an empty cell
-    - "Must I block?" - check every possible winning line for two 'X's and an empty cell
-    - "What's the best strategic move?" - only consider this after checking priorities 1 and 2
-    
-    Return your move as an index 0-8, along with detailed reasoning that shows you followed the priority order.
-    
-    Return JSON:
+
+    Available moves (indices): [${availableMoves.join(', ')}]
+
+    Follow these strict priorities meticulously when choosing your move ONLY from the available moves:
+
+    Priority 1: WINNING MOVE. Check if placing 'O' in any available position results in an immediate win (three 'O's in a row, column, or diagonal). If yes, choose that winning position. Check ALL potential winning lines involving available moves.
+    Priority 2: BLOCKING MOVE. If no winning move exists for 'O', check if the opponent 'X' could win on their *next* turn by placing 'X' in any of the currently available positions. If yes, you MUST choose that position to block them. If multiple blocking moves are needed (e.g., opponent has two winning lines), block one of them. Check ALL potential opponent winning lines involving available moves.
+    Priority 3: STRATEGIC MOVE. If there's no immediate winning move for 'O' AND no immediate blocking move is required against 'X', then choose the best strategic move from the remaining available positions. Good strategies include: taking the center (4 if available), taking corners (0, 2, 6, 8 if available), or setting up a two-way threat (fork).
+
+    Provide detailed reasoning explaining *exactly* how you evaluated the priorities in order (Win? Block? Strategic?). State clearly which priority led to your final move choice.
+
+    Return ONLY JSON in the specified format below. Do not include any other text or markdown formatting outside the JSON structure.
     {
-      "move": index,
-      "reasoning": "your detailed explanation showing priority-based analysis"
+      "move": <chosen_index>,
+      "reasoning": "Detailed explanation following the Win > Block > Strategic priority evaluation."
     }
   `
 

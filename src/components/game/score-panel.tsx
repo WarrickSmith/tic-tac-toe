@@ -30,7 +30,7 @@ const ScoreCard: React.FC<{
         <span className="text-sm sm:text-base text-white">{title}</span>
       </div>
       {isDraw ? (
-        <span className="text-3xl sm:text-4xl md:text-5xl font-bold mb-1 flex items-center">
+        <span className="text-3xl sm:text-4xl md:text-5xl font-bold mb-1 flex items-center mt-2">
           <span className="text-emerald-300">X</span>
           <span className="text-gray-300 mx-1">=</span>
           <span className="text-violet-300">O</span>
@@ -38,7 +38,7 @@ const ScoreCard: React.FC<{
       ) : (
         playerSymbol && (
           <span
-            className={`text-3xl sm:text-4xl md:text-5xl font-bold ${symbolColor} mb-1`}
+            className={`text-3xl sm:text-4xl md:text-5xl font-bold ${symbolColor} mb-1 mt-2`}
           >
             {playerSymbol}
           </span>
