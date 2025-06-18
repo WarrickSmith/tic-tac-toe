@@ -54,7 +54,9 @@ export default function GameClient() {
 
   // Initialize AI service and load scores on component mount
   useEffect(() => {
-    setAiService(new AiService(process.env.NEXT_PUBLIC_GEMINI_API_KEY || ''));
+    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
+    const model = process.env.NEXT_PUBLIC_GEMINI_MODEL || 'gemini-1.5-flash';
+    setAiService(new AiService(apiKey, model));
     setScores(getScores());
   }, []);
 
