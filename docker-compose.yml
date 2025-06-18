@@ -1,0 +1,11 @@
+services:
+  tic-tac-toe:
+    build: .
+    container_name: tic-tac-toe
+    restart: unless-stopped
+    ports:
+      - '3666:3000'
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+    env_file:
+      - ${ENV_FILE:-.env.local}
